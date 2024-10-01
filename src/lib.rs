@@ -96,11 +96,16 @@ impl PostgresStore {
             r#"create schema if not exists "{schema_name}""#,
             schema_name = self.schema_name,
         );
+
         // Concurrent create schema may fail due to duplicate key violations.
         //
         // This works around that by assuming the schema must exist on such an error.
         if let Err(err) = tx.execute(&create_schema_query, &[]).await {
-            if err.code() == Some(&tokio_postgres::error::SqlState::DUPLICATE_SCHEMA) {
+            use tokio_postgres::error::SqlState;
+            if matches!(
+                err.code(),
+                Some(&SqlState::DUPLICATE_SCHEMA | &SqlState::UNIQUE_VIOLATION)
+            ) {
                 return Ok(());
             }
 

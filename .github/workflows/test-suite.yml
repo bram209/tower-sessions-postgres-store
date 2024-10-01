@@ -20,4 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres cargo test
+      - env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: cargo test
