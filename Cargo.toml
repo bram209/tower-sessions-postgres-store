@@ -2,6 +2,8 @@
 name = "tower-sessions-postgres-store"
 version = "0.1.1"
 edition = "2021"
+description = "tower-sessions store backed by tokio-postgres"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 async-trait = "0.1.83"
